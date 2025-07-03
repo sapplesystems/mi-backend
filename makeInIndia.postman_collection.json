@@ -1,0 +1,841 @@
+{
+	"info": {
+		"_postman_id": "23c3c5ae-60be-4c55-8b7e-8b97da71ed14",
+		"name": "makeInIndia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7648788"
+	},
+	"item": [
+		{
+			"name": "Check User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"testuser1@app.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/check-user/?email=mayur@dataorc.in",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"check-user",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "mayur@dataorc.in"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"testuser1@app.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/get-user/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"get-user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send mail with verification code",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"mayur@dataorc.in\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/send-verification-code/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"send-verification-code",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify code",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"mayur@dataorc.in\",\n    \"code\": \"0760\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/check-verification-code/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"check-verification-code",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"mayur@dataorc.in\",\n    \"password1\": \"Admin@123\",\n    \"password2\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/set-password/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"set-password",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mayur@dataorc.in\",\n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/login/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register org",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyOTA5MjE2LCJpYXQiOjE2NzI5MDU2MTYsImp0aSI6IjIyNzZlMzdjNWMyZTQxOWRhNzcxNDNlOWY3MzAyY2EyIiwidXNlcl9pZCI6NH0.LwlHJUL7Gr9sBN-AlM8xc72y1z6EUPErvo2-s-If9jQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"company_name\": \"test org 1\",\n    \"registered_company_name\": \"test org 1, inc\",\n    \"email\": \"mayur@dataorc.in\",\n    \"mobile_number\": \"1234567890\",\n    \"aadhar_number\": \"123456789012\",\n    \"pan_number\": \"abcd2332a\",\n    \"partners\": [{\n        \"sr_no\": 1,\n        \"name\": \"abcd\",\n        \"mobile_number\": \"1234567890\",\n        \"email\": \"abcd@abcd.com\",\n        \"designation\": \"CEO\"\n    }],\n    \"branches\": [{\n        \"address\": \"manufacturing unit\",\n        \"identification_id\": \"gstn/udhyan\",\n        \"state\": \"Haryana\"\n    }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/register/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyOTE0MTg0LCJpYXQiOjE2NzI5MTA1ODQsImp0aSI6IjZjZjNlMGQ3YjMxYjQyZjRhOTgyNmYwM2FjMWJmYzY0IiwidXNlcl9pZCI6NH0.hSZM5NKuYWLF65gRpQWw_-tMLQ24kVUQUALHGFIQ2H4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"details of prodct\",\n    \"category\": \"food\",\n    \"hsn_code\": \"995431\",\n    \"name\": \"Demolition services\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/add-product/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"add-product",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product-apply",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyOTE0MTg0LCJpYXQiOjE2NzI5MTA1ODQsImp0aSI6IjZjZjNlMGQ3YjMxYjQyZjRhOTgyNmYwM2FjMWJmYzY0IiwidXNlcl9pZCI6NH0.hSZM5NKuYWLF65gRpQWw_-tMLQ24kVUQUALHGFIQ2H4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": 2,\n    \"application_status\": \"draft\",\n    \"description\": \"details of prodct\",\n    \"category\": \"food\",\n    \"is_product_regulated\": \"true\",\n    \"regulated_product_details\": {\n        \"certificate_number\": \"\",\n        \"entity_name\": \"\",\n        \"validity\": \"\",\n        \"state\": \"Maharashtra\"\n    },\n    \"unregulated_product_details\": {\n        \"details\": \"\",\n        \"reports\": [\"url1\", \"url2\"]\n    },\n    \"is_imported\": \"false\",\n    \"product_details\": {\n        \"units\": 10,\n        \"total_cost_price\": 3432,\n        \"total_labour_cost\": 322,\n        \"total_overhead_cost\": 23443\n    },\n    \"pricing\": {\n        \"ex_factory_price_per_unit\": 234,\n        \"profit_per_unit\": 40,\n        \"value_added_in_india\": 34\n    },\n    \"compositions\": [{\n        \"sr_no\": 1,\n        \"hsn_code\": \"\",\n        \"quantity\": 34,\n        \"unit_price\": 3443,\n        \"total_price\": 23322,\n        \"units\": 23,\n        \"origin\": \"domestic\",\n        \"documents\": [\"url1\", \"url2\"]\n    }],\n    \"sm_process\": {\n        \"details\": \"\",\n        \"documents\": [\"url1\", \"url2\"]\n    },\n    \"attachment_urls\": [\"url1\", \"url2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/product-apply/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product-apply",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product-items",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjczMDAwNzM5LCJpYXQiOjE2NzI5OTcxMzksImp0aSI6ImI1MDQ5MjA3ODQ4ZTQzY2RiY2UyZmVkYmY1MzZmMjY3IiwidXNlcl9pZCI6MX0.YgjQpPsdOCq6oL6A7-GbbcqNxpgV9uEUp_PoAmam3Jg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"Address of Mfg. Unit\": \"haryana\",\n        \"Weight\": \"235kg\",\n        \"Dimensions\": \"22m\",\n        \"Test Data\": \"random data\",\n        \"sequence_id\": \"3\",\n        \"Height\": \"150m\"\n    },\n    {\n        \"Address of Mfg. Unit\": \"MH\",\n        \"weight\": \"2334kg\",\n        \"dimensions\": \"2432m\",\n        \"test_data\": \"randomsdsd data\"\n    },\n    {\n        \"branch_id\": 4,\n        \"Weight\": \"2334kg\",\n        \"Dimensions\": \"2432m\",\n        \"Test Data\": \"randomsdsd data\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/products/:application_id/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products",
+						":application_id",
+						""
+					],
+					"variable": [
+						{
+							"key": "application_id",
+							"value": "b8ce9807ec4d4816abc7f341064ab696"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-product-details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyOTE4ODgwLCJpYXQiOjE2NzI5MTUyODAsImp0aSI6IjFlYjZkMDFmMTcxOTRmNjk5OWM1YTc1YTdkZTEzNWE3IiwidXNlcl9pZCI6NH0.AQMp-ERnsdaA7Ad__hdra2jwczRxXvyBc2V1rFTuOlU",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"address of mfg. unit\": \"haryana\",\n        \"weight\": \"235kg\",\n        \"dimensions\": \"22m\",\n        \"test_data\": \"random data\"\n    },\n    {\n        \"address of mfg. unit\": \"MH\",\n        \"weight\": \"2334kg\",\n        \"dimensions\": \"2432m\",\n        \"test_data\": \"randomsdsd data\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/product/:external_application_id/:sequence_id/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"product",
+						":external_application_id",
+						":sequence_id",
+						""
+					],
+					"variable": [
+						{
+							"key": "external_application_id",
+							"value": "90f6038665394f87b1d372afe2d34bac"
+						},
+						{
+							"key": "sequence_id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product-search",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjczMzI3OTYxLCJpYXQiOjE2NzMzMjQzNjEsImp0aSI6ImFjOTMwZWRjZjk3MTQyOTJiZWM1N2IwNjc2N2E4NmJjIiwidXNlcl9pZCI6OX0.Qb7AC7bfIwGBpDTKFJ0ZD0d3uW_WhpAnVUEboAsSXCQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/search-product/?query=service",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"search-product",
+						""
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "service"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Applications",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/applications/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Applications Details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/application/1/details/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"application",
+						"1",
+						"details",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Applications Items",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/application/:application_id/items/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"application",
+						":application_id",
+						"items",
+						""
+					],
+					"variable": [
+						{
+							"key": "application_id",
+							"value": "19"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyODA3ODQ4LCJpYXQiOjE2NzI4MDQyNDgsImp0aSI6Ijc2NjRlNTQwMjY2MzRhZDU5YzEyYmVmMWI1MzQ5Y2YzIiwidXNlcl9pZCI6MX0.dpuZjFd4iqbwFHFkkRifCJNuVdd7vJSj59aPFwo3vK8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"abhilash@dataorc.in\",\n    \"password\": \"wrong@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/upload/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"upload",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "submit-feedback",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcyODA3ODQ4LCJpYXQiOjE2NzI4MDQyNDgsImp0aSI6Ijc2NjRlNTQwMjY2MzRhZDU5YzEyYmVmMWI1MzQ5Y2YzIiwidXNlcl9pZCI6MX0.dpuZjFd4iqbwFHFkkRifCJNuVdd7vJSj59aPFwo3vK8",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"abhilash@dataorc.in\",\n    \"password\": \"wrong@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/submit-feedback/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"submit-feedback",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update application status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"approved\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/application/90f6038665394f87b1d372afe2d34bac/update-status/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"application",
+						"90f6038665394f87b1d372afe2d34bac",
+						"update-status",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mayur@dataorc.in\",\n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/api-token-auth/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"api-token-auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mayur@dataorc.in\",\n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/generate-api-token/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"generate-api-token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc2NDU3MDAzLCJpYXQiOjE2NzUxNjEwMDMsImp0aSI6IjUyNGI5ODUyMmI4NjRhNWRiNTZiNTczZjE4ZWZmMDU4IiwidXNlcl9pZCI6NH0.gMD9B8-WZcSANbqcAtpCs47z2eLoXfz8XIwc_AWIHs4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mayur@dataorc.in\",\n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/update-api-token/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"update-api-token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3NTc1MTI3LCJpYXQiOjE2NzYyNzkxMjcsImp0aSI6IjUzZGU1YmM3NTQzYTRiYzJhM2E3MGJlMTk5ZjA2MDRkIiwidXNlcl9pZCI6OX0.IfWZReZvSW7yLBsT3iWc05NIBjeEr6hXTyr03RBM3Zo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mayur@dataorc.in\",\n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MI_DEV_HTTP}}://{{MI_DEV_URL}}/api/v1/get-api-token/",
+					"protocol": "{{MI_DEV_HTTP}}",
+					"host": [
+						"{{MI_DEV_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"get-api-token",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

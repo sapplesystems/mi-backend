@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+    tty: true
+    extra_hosts:
+       - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: settings.local
+      DATABASE_NAME: mii_staging
+      DATABASE_HOST: host.docker.internal
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: sapple@123
+      SECRET_KEY: 5TfQWglcVD6sa8MxMSE11sMs8OEu4cDLM1VbQffb
+

@@ -1,0 +1,36 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "*"
+graphene-django = "*"
+django-graphql-jwt = "*"
+pyjwt = "*"
+pyyaml = "*"
+psycopg2-binary = "*"
+django-extensions = "*"
+django-simple-history = "*"
+django-import-export = "*"
+pipfile = "*"
+Werkzeug = "*"
+django-cors-headers = "*"
+django-health-check = "*"
+validate-email-address = "*"
+djangorestframework = "~=3.14.0"
+djangorestframework-simplejwt = "~=5.2.2"
+django-ses = "~=3.3.0"
+botocore = "~=1.29.32"
+boto3 = "~=1.26.32"
+"backports.zoneinfo" = "~=0.2.1"
+py3dns = "*"
+gunicorn = "20.1.0"
+django-csp = "*"
+requests = "*"
+
+[requires]
+python_version = "3.8"
+

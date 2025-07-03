@@ -1,0 +1,2 @@
+id,password,last_login,is_superuser,username,first_name,last_name,email,is_staff,is_active,date_joined,user_role
+1026,pbkdf2_sha256$600000$EOyuxr1HXPbt3IQr0f6R5r$qZ2nOs3ySYWrJn/Ck+Nvw+c6FlCm6jslDUXAPotInJQ=,,f,shalaka@dataorc.in,"","",shalaka@dataorc.in,t,t,2023-01-12 09:06:40.783211+00,super_admin
