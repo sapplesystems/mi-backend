@@ -352,9 +352,9 @@ def search_application_v2(request):
             Q(product__name__icontains=query) | Q(org__registered_company_name__icontains=query) | Q(unique_application_id__icontains=query)))
         filters &= ~Q(status='draft')
     elif user_role in ['org_admin', 'applicant']:
-        org = orgs_schema.get_org_by_user(request.user.id).id
-        filters &= Q(org_id=org) & Q(unique_application_id__icontains=query)
-        # filters &= Q(applicant_id=request.user.id) & Q(unique_application_id__icontains=query)
+        # org = orgs_schema.get_org_by_user(request.user.id).id
+        # filters &= Q(org_id=org) & Q(unique_application_id__icontains=query)
+        filters &= Q(applicant_id=request.user.id) & Q(unique_application_id__icontains=query)
     elif user_role in ['branch_user']:
         applicant_id = request.user.id
         filters &= Q(applicant_id=applicant_id) & Q(unique_application_id__icontains=query)
