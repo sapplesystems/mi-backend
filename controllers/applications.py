@@ -34,7 +34,7 @@ class ProductApplicationView(APIView):
 
 
 class ProductItemsView(APIView):
-    #authentication_classes = []
+    authentication_classes = []
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser]
 
