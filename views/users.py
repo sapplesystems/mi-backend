@@ -79,10 +79,9 @@ def reset_password(request):
 
 
 def user_login(request):
-    # print("inside login");
-    result_json = validate_captcha(request.data.get('token'))
-    if not result_json.get('success'):
-        return Response({'error': 'Invalid captcha.'}, status=status.HTTP_400_BAD_REQUEST)
+    #result_json = validate_captcha(request.data.get('token'))
+    #if not result_json.get('success'):
+    #    return Response({'error': 'Invalid captcha.'}, status=status.HTTP_400_BAD_REQUEST)
     username = request.data.get('username')
     password = request.data.get('password')
     response = Response()
