@@ -34,13 +34,12 @@ class ProductApplicationView(APIView):
 
 
 class ProductItemsView(APIView):
+    authentication_classes = []
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser]
 
     def post(self, request, application_id):
         return application_view.register_product_items(request, application_id)
-    
-    
 
 
 class UploadFileView(APIView):
