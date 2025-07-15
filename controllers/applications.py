@@ -39,6 +39,8 @@ class ProductItemsView(APIView):
 
     def post(self, request, application_id):
         return application_view.register_product_items(request, application_id)
+    
+    
 
 
 class UploadFileView(APIView):
