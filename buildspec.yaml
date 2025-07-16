@@ -4,14 +4,14 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+      - eval TOKEN=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker login -u navdeep710 -p navondocker
+      - docker login --username AWS --password "$TOKEN" $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - REPO_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - docker pull $REPO_URI:latest || true
       - docker build --cache-from $REPO_URI:latest --tag $REPO_URI:latest --tag $REPO_URI:$IMAGE_TAG .
