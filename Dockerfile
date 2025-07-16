@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8.1
 
 # Create a locked "docker" user to run the app
 RUN addgroup --gid 1000 docker \
