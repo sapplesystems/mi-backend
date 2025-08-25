@@ -1,39 +1,33 @@
 version: 0.2
-
-env:
-  variables:
-    # Optional: set a default container name if your pipeline expects imagedefinitions.json
-    CONTAINER_NAME: app
-
 phases:
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
-      # Use AWS_DEFAULT_REGION (present in CodeBuild)
-      - export REGION="${AWS_DEFAULT_REGION}"
-      # Standard login: pipe password straight to docker login
-      - aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com"
-      # Define repo URI and short image tag (first 7 chars of commit)
-      - export REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
-      - export IMAGE_TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}"
-      - echo "Repo: $REPO_URI  Tag: $IMAGE_TAG"
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - eval TOKEN=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
-      - echo "Build started on $(date)"
-      - echo "Building the Docker image..."
-      # Pull cache if available (won’t fail the build if missing)
-      - docker pull "$REPO_URI:latest" || true
-      # Build with cache and tag both :latest and :$IMAGE_TAG
-      - docker build --cache-from "$REPO_URI:latest" -t "$REPO_URI:latest" -t "$REPO_URI:$IMAGE_TAG" .
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker login --username AWS --password "$TOKEN" $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - REPO_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - docker pull $REPO_URI:latest || true
+      - docker build --cache-from $REPO_URI:latest --tag $REPO_URI:latest --tag $REPO_URI:$IMAGE_TAG .
   post_build:
     commands:
-      - echo "Build completed on $(date)"
-      - echo "Pushing the Docker images..."
-      - docker push "$REPO_URI:latest"
-      - docker push "$REPO_URI:$IMAGE_TAG"
-      - echo "Writing image definitions file..."
+      - eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - REPO_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - docker push $REPO_URI:latest
+      - docker push $REPO_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
       - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPO_URI:$IMAGE_TAG" | tee imagedefinitions.json
-
 artifacts:
-  files:
-    - imagedefinitions.json
+  files: imagedefinitions.json
+  
+  
+  
+  
