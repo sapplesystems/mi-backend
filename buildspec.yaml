@@ -4,18 +4,46 @@ phases:
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
-      - aws --version
-      - docker --version || (echo "Docker not available. Enable Privileged mode and use a Docker-capable image." && exit 1)
+      - aws --version || { echo "AWS CLI not found"; exit 1; }
+      - docker --version || { echo "Docker not available. Enable Privileged mode & use a Docker-capable image."; exit 1; }
+
       # Normalize region
       - |
         if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${AWS_REGION:-}" ]; then
           export AWS_DEFAULT_REGION="$AWS_REGION"
         fi
-      - export REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"
+        if [ -z "${AWS_DEFAULT_REGION:-}" ]; then
+          echo "Region not set. Set AWS_DEFAULT_REGION or AWS_REGION."; exit 1
+        fi
+
+      # Show identity & env (helps catch wrong account/region)
+      - echo "Account: $AWS_ACCOUNT_ID  Region: $AWS_DEFAULT_REGION  Repo: $IMAGE_REPO_NAME"
+      - aws sts get-caller-identity || { echo "STS call failed — check CodeBuild role permissions/credentials"; exit 1; }
+
+      # Build repo/registry URIs
+      - export REGISTRY_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+      - export REPO_URI="$REGISTRY_URI/$IMAGE_REPO_NAME"
+
+      # Ensure repository exists (fail with a clear message if not)
+      - |
+        if ! aws ecr describe-repositories --repository-names "$IMAGE_REPO_NAME" --region "$AWS_DEFAULT_REGION" >/dev/null 2>&1; then
+          echo "ECR repository '$IMAGE_REPO_NAME' not found in $AWS_DEFAULT_REGION for account $AWS_ACCOUNT_ID."
+          echo "Create it or fix AWS_ACCOUNT_ID / region."
+          exit 1
+        fi
+
+      # Get password to a variable (no pipe yet; surfaces real error)
+      - |
+        set -x
+        TOKEN="$(aws ecr get-login-password --region "$AWS_DEFAULT_REGION")" || { echo "get-login-password failed. Missing ecr:GetAuthorizationToken?"; exit 1; }
+        set +x
+
+      # Now login with --password-stdin using the token
+      - printf '%s' "$TOKEN" | docker login --username AWS --password-stdin "$REGISTRY_URI" || { echo "Docker login to $REGISTRY_URI failed"; exit 1; }
+
+      # Tag to use
       - COMMIT_HASH=$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)
       - export IMAGE_TAG=${COMMIT_HASH:-latest}
-      # Proper ECR login (single line; no backslash)
-      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 
   build:
     commands:
