@@ -3,20 +3,29 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - set -euo pipefail
+      # Safer 'set' for shells without pipefail
+      - set -e
+      - (set -o pipefail) 2>/dev/null && set -o pipefail || echo "pipefail not supported; continuing"
       - echo "Logging in to Amazon ECR..."
       - aws --version
+
       # Normalize region
       - if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${AWS_REGION:-}" ]; then export AWS_DEFAULT_REGION="$AWS_REGION"; fi
       - if [ -z "${AWS_DEFAULT_REGION:-}" ]; then echo "Region not set. Set AWS_DEFAULT_REGION or AWS_REGION." && exit 1; fi
-      # Ensure account ID is available
+
+      # Ensure account ID
       - if [ -z "${AWS_ACCOUNT_ID:-}" ]; then export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text); fi
+
+      # Compose and print repo URI
       - export REPOSITORY_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}
       - echo "REPOSITORY_URI=${REPOSITORY_URI}"
-      # Explicit check: fail if repo doesn’t exist
-      - aws ecr describe-repositories --repository-names "${IMAGE_REPO_NAME}"
-      # Non-TTY safe login
+
+      # Hard check: fail if repo doesn't exist
+      - aws ecr describe-repositories --repository-names "${IMAGE_REPO_NAME}" >/dev/null 2>&1 || { echo "ECR repo '${IMAGE_REPO_NAME}' not found in ${AWS_DEFAULT_REGION}"; exit 1; }
+
+      # Non-TTY safe ECR login
       - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+
       # Short SHA for tagging
       - export IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}
 
