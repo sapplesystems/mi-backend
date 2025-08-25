@@ -5,7 +5,8 @@ phases:
     commands:
       - echo "Logging in to Amazon ECR..."
       - aws --version
-      # Normalize region if only AWS_REGION is set
+      - docker --version || (echo "Docker not available. Enable Privileged mode and use a Docker-capable image." && exit 1)
+      # Normalize region
       - |
         if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${AWS_REGION:-}" ]; then
           export AWS_DEFAULT_REGION="$AWS_REGION"
@@ -13,9 +14,8 @@ phases:
       - export REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"
       - COMMIT_HASH=$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)
       - export IMAGE_TAG=${COMMIT_HASH:-latest}
-      # Proper ECR login (no eval; use password-stdin)
-      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | \
-        docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+      # Proper ECR login (single line; no backslash)
+      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 
   build:
     commands:
