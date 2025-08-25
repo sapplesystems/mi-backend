@@ -21,26 +21,7 @@ phases:
       - echo "REPOSITORY_URI=${REPOSITORY_URI}"
 
       # Hard check: fail if repo doesn't exist
-      # Hard check with diagnostics (prints actual AWS error)
-      - echo "Verifying ECR repo '${IMAGE_REPO_NAME}' in ${AWS_DEFAULT_REGION} for account ${AWS_ACCOUNT_ID}..."
-      - |
-        if ! aws ecr describe-repositories --repository-names "${IMAGE_REPO_NAME}"; then
-          echo "----"
-          echo "ECR repo check FAILED."
-          echo "Common causes:"
-          echo "  • Repo doesn't exist in ${AWS_DEFAULT_REGION}"
-          echo "  • IMAGE_REPO_NAME is wrong/empty"
-          echo "  • Missing permissions: need ecr:DescribeRepositories"
-          echo "---- Context ----"
-          echo "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}"
-          echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
-          echo "IMAGE_REPO_NAME=${IMAGE_REPO_NAME}"
-          echo "Caller identity:"
-          aws sts get-caller-identity || true
-          echo "List of repos (first 50) in ${AWS_DEFAULT_REGION}:"
-          aws ecr describe-repositories --max-results 50 --query 'repositories[].repositoryName' --output text || true
-          exit 1
-        fi
+      - aws ecr describe-repositories --repository-names "${IMAGE_REPO_NAME}" >/dev/null 2>&1 || { echo "ECR repo '${IMAGE_REPO_NAME}' not found in ${AWS_DEFAULT_REGION}"; exit 1; }
 
       # Non-TTY safe ECR login
       - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
