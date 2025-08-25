@@ -3,12 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
-      - aws --version || { echo "AWS CLI not found"; exit 1; }
-      - docker --version || { echo "Docker not available. Enable Privileged mode & use a Docker-capable image."; exit 1; }
-
-      # Normalize region
       - |
+        set -e
+        echo "Logging in to Amazon ECR..."
+        aws --version || { echo "AWS CLI not found"; exit 1; }
+        docker --version || { echo "Docker not available. Enable Privileged mode & use a Docker-capable image."; exit 1; }
+
+        # Normalize region
         if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${AWS_REGION:-}" ]; then
           export AWS_DEFAULT_REGION="$AWS_REGION"
         fi
@@ -16,53 +17,46 @@ phases:
           echo "Region not set. Set AWS_DEFAULT_REGION or AWS_REGION."; exit 1
         fi
 
-      # Show identity & env (helps catch wrong account/region)
-      - echo "Account: $AWS_ACCOUNT_ID  Region: $AWS_DEFAULT_REGION  Repo: $IMAGE_REPO_NAME"
-      - aws sts get-caller-identity || { echo "STS call failed — check CodeBuild role permissions/credentials"; exit 1; }
+        echo "Account: ${AWS_ACCOUNT_ID}  Region: ${AWS_DEFAULT_REGION}  Repo: ${IMAGE_REPO_NAME}"
+        aws sts get-caller-identity || { echo "STS call failed — check CodeBuild role permissions/credentials"; exit 1; }
 
-      # Build repo/registry URIs
-      - export REGISTRY_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
-      - export REPO_URI="$REGISTRY_URI/$IMAGE_REPO_NAME"
+        # Registry/repo URIs
+        REGISTRY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        REPO_URI="${REGISTRY_URI}/${IMAGE_REPO_NAME}"
+        export REGISTRY_URI REPO_URI
 
-      # Ensure repository exists (fail with a clear message if not)
-      - |
-        if ! aws ecr describe-repositories --repository-names "$IMAGE_REPO_NAME" --region "$AWS_DEFAULT_REGION" >/dev/null 2>&1; then
-          echo "ECR repository '$IMAGE_REPO_NAME' not found in $AWS_DEFAULT_REGION for account $AWS_ACCOUNT_ID."
-          echo "Create it or fix AWS_ACCOUNT_ID / region."
+        # Ensure ECR repo exists
+        if ! aws ecr describe-repositories --repository-names "${IMAGE_REPO_NAME}" --region "${AWS_DEFAULT_REGION}" >/dev/null 2>&1; then
+          echo "ECR repository '${IMAGE_REPO_NAME}' not found in ${AWS_DEFAULT_REGION} for account ${AWS_ACCOUNT_ID}."
           exit 1
         fi
 
-      # Get password to a variable (no pipe yet; surfaces real error)
-      - |
-        set -x
-        TOKEN="$(aws ecr get-login-password --region "$AWS_DEFAULT_REGION")" || { echo "get-login-password failed. Missing ecr:GetAuthorizationToken?"; exit 1; }
-        set +x
+        # ECR login (no YAML quoting issues)
+        TOKEN="$(aws ecr get-login-password --region "${AWS_DEFAULT_REGION}")" || { echo "get-login-password failed. Missing ecr:GetAuthorizationToken?"; exit 1; }
+        printf '%s' "${TOKEN}" | docker login --username AWS --password-stdin "${REGISTRY_URI}" || { echo "Docker login to ${REGISTRY_URI} failed"; exit 1; }
 
-      # Now login with --password-stdin using the token
-      - printf '%s' "$TOKEN" | docker login --username AWS --password-stdin "$REGISTRY_URI" || { echo "Docker login to $REGISTRY_URI failed"; exit 1; }
-
-      # Tag to use
-      - COMMIT_HASH=$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)
-      - export IMAGE_TAG=${COMMIT_HASH:-latest}
+        # Image tag
+        COMMIT_HASH="$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)"
+        IMAGE_TAG="${COMMIT_HASH:-latest}"
+        export IMAGE_TAG
 
   build:
     commands:
-      - echo "Build started on $(date)"
-      - echo "Building Docker image $REPO_URI:$IMAGE_TAG"
-      - docker pull "$REPO_URI:latest" || true
-      - docker build --cache-from "$REPO_URI:latest" -t "$REPO_URI:latest" -t "$REPO_URI:$IMAGE_TAG" .
+      - |
+        echo "Build started on $(date)"
+        echo "Building Docker image ${REPO_URI}:${IMAGE_TAG}"
+        docker pull "${REPO_URI}:latest" || true
+        docker build --cache-from "${REPO_URI}:latest" -t "${REPO_URI}:latest" -t "${REPO_URI}:${IMAGE_TAG}" .
 
   post_build:
     commands:
-      - echo "Build completed on $(date)"
-      - echo "Pushing Docker images..."
-      - docker push "$REPO_URI:latest"
-      - docker push "$REPO_URI:$IMAGE_TAG"
-      - echo "Writing image definitions..."
       - |
-        cat > imagedefinitions.json <<EOF
-        [{"name":"$CONTAINER_NAME","imageUri":"$REPO_URI:$IMAGE_TAG"}]
-        EOF
+        echo "Build completed on $(date)"
+        echo "Pushing Docker images..."
+        docker push "${REPO_URI}:latest"
+        docker push "${REPO_URI}:${IMAGE_TAG}"
+        echo "Writing image definitions..."
+        printf '[{"name":"%s","imageUri":"%s"}]' "${CONTAINER_NAME}" "${REPO_URI}:${IMAGE_TAG}" > imagedefinitions.json
 
 artifacts:
   files:
