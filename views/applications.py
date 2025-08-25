@@ -80,7 +80,6 @@ def get_item_url(request, application_id, sequence_id, item_key):
 
 
 def register_product_items(request, external_application_id):
-    # print("inside register product")
     user = request.user
     org = orgs_schema.get_org_by_user(user.id)
     if request.user.user_role == 'branch_user':
