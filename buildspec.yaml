@@ -3,33 +3,32 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
-      - aws --version
-      # Normalize region & repo vars
-      - : "${AWS_DEFAULT_REGION:=${AWS_REGION}}"
-      - REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"
-      # Set tag from commit (fallback to 'latest' if unavailable)
-      - COMMIT_HASH=$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:-latest}
+      - "set -euo pipefail"
+      - "echo Logging in to Amazon ECR..."
+      - "aws --version"
+      # Normalize region & repo vars (quote because of colons/braces)
+      - 'AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-${AWS_REGION:-}}"; export AWS_DEFAULT_REGION'
+      - 'REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME"; export REPO_URI'
+      - 'COMMIT_HASH="$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}" | cut -c 1-7)"'
+      - 'IMAGE_TAG="${COMMIT_HASH:-latest}"; export IMAGE_TAG'
       # Proper ECR login (no eval; use password-stdin)
-      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | \
-        docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+      - 'aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"'
 
   build:
     commands:
-      - echo "Build started on $(date)"
-      - echo "Building Docker image $REPO_URI:$IMAGE_TAG"
-      - docker pull "$REPO_URI:latest" || true
-      - docker build --cache-from "$REPO_URI:latest" -t "$REPO_URI:latest" -t "$REPO_URI:$IMAGE_TAG" .
+      - 'echo "Build started on $(date)"'
+      - 'echo "Building Docker image $REPO_URI:$IMAGE_TAG"'
+      - 'docker pull "$REPO_URI:latest" || true'
+      - 'docker build --cache-from "$REPO_URI:latest" -t "$REPO_URI:latest" -t "$REPO_URI:$IMAGE_TAG" .'
 
   post_build:
     commands:
-      - echo "Build completed on $(date)"
-      - echo "Pushing Docker images..."
-      - docker push "$REPO_URI:latest"
-      - docker push "$REPO_URI:$IMAGE_TAG"
-      - echo "Writing image definitions..."
-      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPO_URI:$IMAGE_TAG" > imagedefinitions.json
+      - 'echo "Build completed on $(date)"'
+      - 'echo "Pushing Docker images..."'
+      - 'docker push "$REPO_URI:latest"'
+      - 'docker push "$REPO_URI:$IMAGE_TAG"'
+      - 'echo "Writing image definitions..."'
+      - 'printf "[{\\"name\\":\\"%s\\",\\"imageUri\\":\\"%s\\"}]" "$CONTAINER_NAME" "$REPO_URI:$IMAGE_TAG" > imagedefinitions.json'
 
 artifacts:
   files:
